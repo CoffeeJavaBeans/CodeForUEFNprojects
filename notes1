@@ -1,0 +1,173 @@
+#This is crashing, but I want to keep these before deleting and trying some more. :) Some of this is good, some of it is likely wrong.
+#This is just notes and me learning and trying Verse for my current project before starting to code it.
+
+using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+using { /UnrealEngine.com/Temporary/Diagnostics }
+
+Info:= class:
+    var X<private>: int = 0
+    var Y<private>: int = 0
+    var Z<private>: int = 0
+    var Index<private>: int = 0
+    var SomeRandoString<private>: string = "Meow"
+    var SomeRandoBool<private>: logic =false
+
+
+    setX(newX : int): void=
+        set X =newX
+    
+    setY(newY : int): void=
+        set Y =newY
+
+    setZ(newZ : int): void=
+        set Z=newZ
+
+    setIndex(newIndex :int): void=
+        set Index = newInex
+
+    setSomeRandoString(newString: string): void =
+        set SomeRandoString = newString
+
+    printX(x: int): void=
+        print("x = {X}")
+    
+    printY(y: int): void=
+        print("y ={Y}")
+
+    printIndex(index: int):void=
+        print("Index={Index}")
+
+   
+
+Cat := class(Info):
+    var Name<private> : string ="Jane"
+    var Age<private> : int = 0
+    var Sound<private> : string ="Meow"
+    var Size<private> : int = 5
+    var LongArray<private>: []int = 
+        var Indexes: int = 0
+            for(Row := 0..25):
+                Indexes
+
+    var Grid<private> :  [][]int = #This does work! Yaay
+            var Num : int = 0
+                for (Row := 0..5):
+                    for(Column := 0..5):
+                         Num
+    var AnotherGrid<private> : [][][]int = #Not sure this works yet 
+        var Num : []int = {1,1,1,1,0}
+                for (Row := 0..5):
+                    for(Column := 0..5):
+                         Num
+    
+    setName( newname: string): void = 
+        set Name = newname
+
+    setAge( age: int): void =
+        set Age = age
+    
+    setSound(sound : string): void =
+        set Sound= sound
+    
+    setSIze(num: int): void=
+        set Size = num
+
+    getName(): string :=
+        return Name
+
+    getAge(): int :=
+        return Age
+
+    getSound(): string :=
+        return Sound
+
+    setGrid():void=
+        var Counter : int = 0
+            tempGrid : [][]int =
+                for (Row := 0..5):
+                    for(Column := 0..5):
+                        set Counter += 1
+        set Grid = tempGrid
+
+            
+    printGrid(): void=
+        if (NumberOfColumns : int = Grid[0].Length):
+            for(Row := 0..Grid.Length, Column := 0..NumberOfColumns):
+                if (Element := Grid[Row][Column]):
+                    Print("{Element} at index [{Row}][{Column}]")
+
+    printAnotherGrid(): void=
+        if (NumberOfColumns : int = Grid[0].Length):
+            for(Row := 0..Grid.Length, Column := 0..NumberOfColumns):
+                if (Element := Grid[Row][Column]):
+                    Print("{Element}")
+
+
+        
+
+    getValue(x: int, y: int): int =
+        if(Element := Grid[x][y]):
+            return Element
+        else:
+            return 10000
+
+
+    setValue(x: int, y: int,  value: int): void =
+        if(set Grid[x][y] = value):
+
+    TwoDArrayIndexesToOneDArrayIndex(size: int,i: int, j: int): int=
+        #takes i, j of 2 d array and returns the index of the 1d array
+        #array[0].lengh*i+j
+        return size*i+j
+
+              
+    makeCells(size: int):void=
+        #cell:=Info{}
+        var Counter: int = 0
+        for (Row := 0..size):
+            for(Column := 0..size):
+                Info{X=>Row, Y=>Column, Index=>Row*X+Y}
+
+                        
+
+    Meow() : void = Print(Sound)
+
+# A Verse-authored creative device that can be placed in a level
+learning_classes_device := class(creative_device):
+
+
+    # Runs when the device is started in a running game
+    OnBegin<override>()<suspends>:void=
+        # TODO: Replace this with your code
+        #OldCat := cat{Name := ”Percy”, Age := 20, Sound:= ”Rrrr”}
+        #Kitten := Cat{Name := "Flash", Age := 1, Sound := "Mew"}
+        
+        Kitten:=Cat{}
+        Kitten.setName("kitty")
+        Print(Kitten.getName())
+        Kitten.Meow()
+        #Print(Kitten.getValue(0,0))
+        #var arr: [][]int = Kitten.getGrid()
+        #var t : int:= 10000
+        #var t : int = Kitten.getValue(0,0)
+        #Print("This might have worked lol ! {t}")
+        #
+        #var t2 : int = Kitten.getValue(4,4)
+        #Print("This might have worked lol too! {t2}")
+        #       
+        #var t3 : int =Kitten.getValue(6,6)
+        #Print("This shouldn't work it's out of bounds {t3}")
+        #
+        #Kitten.setValue(0,0,5555)
+        #var t5: int = Kitten.getValue(0,0)
+        #Print("set value at 0,0 to {t5}")
+        #Kitten.setGrid()
+        #
+        #t6 : int = Kitten.getValue(2,2)
+        #Print("Lets see if this remade the grid? {t6}")
+        Kitten.makeCells(5)
+        Kitten.printIndex(5)
+        Kitten.printX(0)
+        Kitten.printY(5)
+
