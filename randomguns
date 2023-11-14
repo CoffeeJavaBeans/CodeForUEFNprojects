@@ -1,0 +1,82 @@
+
+using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+using { /Fortnite.com/Teams}
+using { /Fortnite.com/Game}
+using { /Fortnite.com/Characters}
+using { /UnrealEngine.com/Temporary/Diagnostics }
+using { /Verse.org/Random }
+
+# See https://dev.epicgames.com/documentation/en-us/uefn/create-your-own-device-in-verse for how to create a verse device.
+
+# A Verse-authored creative device that can be placed in a level
+game_management_device := class(creative_device):
+
+    var PlayerMap : [player]int = map {}
+
+    @editable
+    var WeaponGranters :[]item_granter_device=array{}
+
+    @editable
+    var Guards : []guard_spawner_device = array{}
+
+    @editable
+    #var Timers : timer_device = timer_device{}
+    var Timers : []timer_device = array{}
+
+
+    @editable
+    var Trigger : trigger_device = trigger_device{}
+
+    @editable
+    #var Accolades : accolades_device = accolades_device{}
+    var Accolades : []accolades_device = array{}
+
+
+    # Runs when the device is started in a running game
+    OnBegin<override>()<suspends>:void=
+        InitPlayers()
+        
+
+    InitPlayers(): void=
+        AllPlayers := GetPlayspace().GetPlayers()
+        for(APlayer :AllPlayers, FortCharacter := APlayer.GetFortCharacter[]):
+            if (set PlayerMap[APlayer] =0, WeaponTier:=PlayerMap[APlayer]):
+                FortCharacter.EliminatedEvent().Subscribe(OnPlayerEliminated) 
+                Trigger.TriggeredEvent.Subscribe(OnTriggered)
+                #Accolades.TestAwardEvent.Subscribe(AwardEventTriggered)
+                #Timers.SuccessEvent.Subscribe(OnTimerFinish)
+                GrantWeapon(APlayer, WeaponTier )
+
+    GrantWeapon(APlayer :player, WeaponTier: int ): void =
+        Print("Attempting to grant weapon")
+        if(ItemGranter := WeaponGranters[WeaponTier]):
+            Print("Granted Item to Player")
+            ItemGranter.GrantItem(APlayer)
+
+    OnPlayerEliminated(Result : elimination_result) : void=
+        Eliminator := Result.EliminatingCharacter 
+        if(FortCharacter := Eliminator?, EliminatingAgent := FortCharacter.GetAgent[]):
+
+    PromotePlayer(Agent :agent):void=
+        var NumberOfWeaponGranters:int = WeaponGranters.Length-1
+        var WeaponTier : int = GetRandomInt(0, NumberOfWeaponGranters)
+        
+        #if(APlayer := player[Agent], PlayerWeaponTier := PlayerMap[APlayer]):
+            #set WeaponTier = PlayerWeaponTier + 1
+             
+        if(APlayer := player[Agent], set PlayerMap[APlayer]=WeaponTier):
+            GrantWeapon(APlayer, WeaponTier)
+
+    OnTriggered(Agent: ?agent): void =
+        Print("Guard Eliminated")
+        if(APlayer := Agent?):
+            PromotePlayer(APlayer)
+
+    #AwardEventTriggered(Agent:agent):void=
+    #    Print("A Player was awarded XP!")
+    #    Accolades.Award(Agent)
+
+    #OnTimerFinish(Agent: ?agent): void=
+    #    Print("Timed Award XP!")
+        
